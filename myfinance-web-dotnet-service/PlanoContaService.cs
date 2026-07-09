@@ -17,7 +17,7 @@ namespace myfinance_web_dotnet_service
         {
             var dbSet = _dbContext.PlanoConta;
 
-            if(Entidade.Id == 0)
+            if(!Entidade.Id.HasValue || Entidade.Id == 0)
             {
                 dbSet.Add(Entidade);
             }
@@ -26,6 +26,8 @@ namespace myfinance_web_dotnet_service
                 dbSet.Attach(Entidade);
                 _dbContext.Entry(Entidade).State = EntityState.Modified;
             }
+
+            _dbContext.SaveChanges();
         }
 
         public void Excluir(int Id)
