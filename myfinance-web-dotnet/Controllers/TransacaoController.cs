@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using myfinance_web_dotnet.Models;
 using myfinance_web_dotnet_domain.Entities;
 using myfinance_web_dotnet_service.Interfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace myfinance_web_dotnet.Controllers
 {
@@ -16,13 +17,16 @@ namespace myfinance_web_dotnet.Controllers
     {
         private readonly ILogger<TransacaoController> _logger;
         private readonly ITransacaoService _transacaoService;
+        private readonly IPlanoContaService _planoContaService;
 
         public TransacaoController(
         ILogger<TransacaoController> logger,
-        ITransacaoService transacaoService)
+        ITransacaoService transacaoService,
+        IPlanoContaService planoContaService)
         {
             _logger = logger;
             _transacaoService = transacaoService;
+            _planoContaService = planoContaService;
         }
 
         [HttpGet]
@@ -52,25 +56,28 @@ namespace myfinance_web_dotnet.Controllers
         [Route("Cadastrar/{Id}")]
         public IActionResult Cadastrar(int? Id)
         {
-            if (Id != null)
-            {
-                
-            var transacao = _transacaoService.RetornarRegistro((int)Id);
+            var ListaPlanoContas = new SelectList(_planoContaService.ListarRegistros(), "Id", "Descricao");
 
             var transacaoModel = new TransacaoModel()
             {
-                Id = transacao.Id,
-                Historico = transacao.Historico,
-                Data = transacao.Data,
-                Valor = transacao.Valor,
-                PlanoContaId = transacao.PlanoContaId
+                Data = DateTime.Now,
+                ListaPlanoContas = ListaPlanoContas
             };
 
+            if (Id != null)
+            {
+                
+                var transacao = _transacaoService.RetornarRegistro((int)Id);
+
+                transacaoModel.Id = transacao.Id;
+                transacaoModel.Historico = transacao.Historico;
+                transacaoModel.Data = transacao.Data;
+                transacaoModel.Valor = transacao.Valor;
+                transacaoModel.PlanoContaId = transacao.PlanoContaId;  
+
+            }
+            
             return View(transacaoModel);
-            }
-            else{
-                return View();
-            }
             
         }
 
