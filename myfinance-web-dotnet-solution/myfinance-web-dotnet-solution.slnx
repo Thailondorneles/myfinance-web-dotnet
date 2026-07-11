@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="../myfinance-web-dotnet-domain/myfinance-web-dotnet-domain.csproj" />
+  <Project Path="../myfinance-web-dotnet-infra/myfinance-web-dotnet-infra.csproj" />
+  <Project Path="../myfinance-web-dotnet-service/myfinance-web-dotnet-service.csproj" />
+  <Project Path="../myfinance-web-dotnet/myfinance-web-dotnet.csproj" />
+</Solution>
